@@ -1,0 +1,51 @@
+# Lu Indumentaria — Tienda online de ropa oversize
+
+E-commerce full stack hecho con **Next.js 16 (App Router) + TypeScript + Tailwind CSS**, base de datos y autenticación en **Supabase** y deploy en **Vercel**. 100 % con planes gratuitos.
+
+## Funcionalidades
+
+- Catálogo con categorías, buscador y página de detalle con selección de talle y cantidad
+- Promos tipo “X% OFF comprando 2 o más” y compra mínima de $100.000 para envíos (Vía Cargo o el transporte que elija quien compra)
+- Carrito persistente (localStorage)
+- Checkout que crea el pedido mediante una **función SQL (RPC) segura**: recalcula precios en la base, valida talles y stock, aplica descuentos y descuenta stock en una sola transacción
+- **Panel de administración** (`/admin`) con login de Supabase Auth: métricas, pedidos con cambio de estado y edición de precio / stock / visibilidad de productos
+- **20 medidas de seguridad** (variables de entorno, RLS, validaciones en la base, límite de intentos de login, headers CSP, etc.) → ver [SECURITY.md](SECURITY.md) y la checklist completa de 40 puntos en [CHECKLIST.md](CHECKLIST.md)
+- Newsletter, botón de WhatsApp, banner de cookies, diseño responsive
+- **Modo demo**: si no hay variables de Supabase la tienda funciona con datos locales
+
+## Stack
+
+| Capa | Tecnología |
+| --- | --- |
+| Frontend | Next.js 16, React 19, Tailwind CSS 4 |
+| Backend / DB | Supabase (PostgreSQL, RLS, RPC, Auth) |
+| Hosting | Vercel (plan Hobby) |
+
+## Correrlo localmente
+
+```bash
+npm install
+cp .env.example .env.local   # completá tus claves de Supabase
+npm run dev
+```
+
+## Configurar Supabase (plan Free)
+
+1. Creá un proyecto en <https://supabase.com>.
+2. En **SQL Editor** ejecutá `supabase/schema.sql` y después `supabase/seed.sql`.
+3. En **Authentication > Users > Add user** creá tu usuario admin (email + contraseña).
+4. En el SQL Editor dale permisos de admin:
+   ```sql
+   insert into public.admins (user_id)
+     select id from auth.users where email = 'tu-email@ejemplo.com';
+   ```
+5. **Importante:** en **Authentication > Sign In / Providers** desactivá “Allow new users to sign up”, y en **Authentication > URL Configuration** poné como *Site URL* la URL de Vercel (para el mail de recuperación de contraseña).
+6. Copiá **Project URL** y la clave **anon / publishable** (Project Settings > API) a `.env.local`. ⚠️ Nunca uses la clave `service_role` / secret.
+
+## Deploy en Vercel
+
+1. Subí el repo a GitHub.
+2. En <https://vercel.com/new> importá el repo.
+3. Nombrá el proyecto `luindumentaria` (así la dirección queda luindumentaria.vercel.app) y agregá las variables `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` y hacé deploy.
+
+> Nota: proyecto de portfolio, no procesa pagos reales. Imágenes de [Unsplash](https://unsplash.com).
