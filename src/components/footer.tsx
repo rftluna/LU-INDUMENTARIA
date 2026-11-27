@@ -135,6 +135,7 @@ export function Footer() {
                 <li><Link href="/info#devoluciones" className="hover:text-white">Política de devolución</Link></li>
                 <li><Link href="/info#terminos" className="hover:text-white">Términos y condiciones</Link></li>
                 <li><Link href="/info#privacidad" className="hover:text-white">Política de privacidad</Link></li>
+                <li><Link href="/info#creditos" className="hover:text-white">Licencias y créditos</Link></li>
               </ul>
             </div>
             <div>
